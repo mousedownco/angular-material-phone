@@ -4,6 +4,10 @@ This repository contains a simply Angular 9 project that illustrates a way of ha
 
 A detailed discussion of this project's contents can be found in my blog post [Angular Material Phone Entry](https://mikedalrymple.com/angular-material-phone).
 
+The end result looks something like this:
+
+![Angular Material Phone Entry](angular-material-phone.gif)
+
 # Running
 
 Building and running the application follows standard Angular patterns.
