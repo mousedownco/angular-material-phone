@@ -25,12 +25,12 @@ describe('PhoneComponent', () => {
 
     test('initialization', () => {
         expect(component).toBeTruthy();
-        expect(component.phoneRegion.value).toEqual('US');
+        expect(component.phoneCountryControl.value).toEqual('US');
     });
 
     for (const countryCode of ISO_3166_1_CODES) {
         test(`phoneHint(${countryCode.code}) is not empty`, () => {
-            component.phoneRegion.setValue(countryCode.code);
+            component.phoneCountryControl.setValue(countryCode.code);
             expect(component.phoneHint).toBeTruthy();
         });
     }
@@ -38,9 +38,9 @@ describe('PhoneComponent', () => {
     test('#phoneE164()', () => {
         const input = '(301) 555-1212';
         const expected = '+13015551212';
-        component.phoneRegion.setValue('US');
-        component.phoneNumber.setValue(input);
-        expect(component.phone.valid).toEqual(true);
+        component.phoneCountryControl.setValue('US');
+        component.phoneNumberControl.setValue(input);
+        expect(component.phoneGroup.valid).toEqual(true);
         expect(component.phoneE164).toEqual(expected);
     });
 });
@@ -48,12 +48,12 @@ describe('PhoneComponent', () => {
 describe('phoneValidator', () => {
     test('null number control', () => {
         const group = new FormGroup({
-            region: new FormControl()
+            country: new FormControl()
         });
         expect(phoneValidator(group)).toBeNull();
     });
 
-    test('null region control', () => {
+    test('null country control', () => {
         const group = new FormGroup({
             number: new FormControl()
         });
@@ -75,7 +75,7 @@ describe('phoneValidator', () => {
             test(`${data[0]} in ${data[1]} is ${(data[2]) ? '' : 'NOT'} valid`, () => {
                 const group = new FormGroup({
                     number: new FormControl(data[0]),
-                    region: new FormControl(data[1])
+                    country: new FormControl(data[1])
                 });
                 expect(phoneValidator(group) == null).toBe(data[2]);
             });
@@ -88,17 +88,17 @@ describe('PhoneErrorMatcher', () => {
     const phoneErrorMatcher = new PhoneErrorMatcher();
     let phoneForm: FormGroup;
     let phoneNumber: FormControl;
-    let phoneRegion: FormControl;
+    let phoneCountry: FormControl;
     beforeEach(() => {
         phoneForm = fb.group({
             phone: fb.group({
-                    region: ['US'],
+                    country: ['US'],
                     number: ['']
                 },
                 {validators: phoneValidator})
         });
         phoneNumber = phoneForm.get('phone.number') as FormControl;
-        phoneRegion = phoneForm.get('phone.region') as FormControl;
+        phoneCountry = phoneForm.get('phone.country') as FormControl;
     });
 
     test('isErrorState (untouched)', () => {

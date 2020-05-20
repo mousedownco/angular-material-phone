@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, ValidationErrors, ValidatorFn} from '@angular/forms';
 import PhoneNumber from 'awesome-phonenumber';
 import {ISO_3166_1_CODES} from './country-codes';
@@ -14,7 +14,7 @@ export class PhoneComponent {
     countyCodes = ISO_3166_1_CODES;
     profileForm = this.fb.group({
         phone: this.fb.group({
-            region: ['US'],
+            country: ['US'],
             number: ['']
         }, {validators: phoneValidator})
     });
@@ -25,44 +25,48 @@ export class PhoneComponent {
     ) {
     }
 
-    get phone() {
+    get phoneGroup() {
         return this.profileForm.get('phone') as FormControl;
     }
 
-    get phoneRegion() {
-        return this.profileForm.get('phone.region') as FormControl;
+    get phoneCountryControl() {
+        return this.profileForm.get('phone.country') as FormControl;
     }
 
-    get phoneNumber() {
+    get phoneNumberControl() {
         return this.profileForm.get('phone.number') as FormControl;
     }
 
     get phoneNumberDigits(): string {
-        return this.phoneNumber.value.replace(/\D/g, '');
+        return this.phoneNumberControl.value.replace(/\D/g, '');
     }
 
-    get regionalPhoneNumber(): PhoneNumber {
-        return new PhoneNumber(this.phoneNumberDigits, this.phoneRegion.value);
+    get phoneNumber(): PhoneNumber {
+        return new PhoneNumber(this.phoneNumberDigits, this.phoneCountryControl.value);
     }
 
     get phoneHint(): string {
-        return PhoneNumber.getExample(this.phoneRegion.value).getNumber('national');
+        return PhoneNumber.getExample(this.phoneCountryControl.value).getNumber('national');
     }
 
     get phoneE164(): string {
-        return this.regionalPhoneNumber.getNumber('e164');
+        return this.phoneNumber.getNumber('e164');
     }
 
     formatNumber() {
-        const natNum = this.regionalPhoneNumber.getNumber('national');
-        this.phoneNumber.setValue((natNum) ? natNum : this.phoneNumberDigits);
+        const natNum = this.phoneNumber.getNumber('national');
+        this.phoneNumberControl.setValue((natNum) ? natNum : this.phoneNumberDigits);
     }
 }
 
 export const phoneValidator: ValidatorFn = (control: FormGroup): ValidationErrors | null => {
     const num = control.get('number');
-    const region = control.get('region');
-    return num?.value && region?.value && !(new PhoneNumber(num.value, region.value).isValid()) ? {invalidPhone: true} : null;
+    const country = control.get('country');
+    if (num?.value && country?.value && !(new PhoneNumber(num.value, country.value).isValid())) {
+        return {invalidPhone: true};
+    } else {
+        return null;
+    }
 };
 
 export class PhoneErrorMatcher implements ErrorStateMatcher {

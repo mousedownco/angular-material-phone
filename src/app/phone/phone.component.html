@@ -1,32 +1,38 @@
 <mat-card>
-    <mat-card-title>International Phone Entry</mat-card-title>
-    <form class="profile" [formGroup]="profileForm">
-        <div formGroupName="phone">
-            <mat-form-field appearance="standard" class="phone_region">
-                <mat-label>Phone Region</mat-label>
-                <mat-select formControlName="region" (selectionChange)="formatNumber()">
-                    <mat-option *ngFor="let countryCode of countyCodes" [value]="countryCode.code">
-                        {{countryCode.country}}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-            <mat-form-field appearance="standard" class="phone_number">
-                <mat-label>Phone Number</mat-label>
-                <input formControlName="number"
-                       type="tel"
-                       placeholder="Telephone"
-                       (input)="formatNumber()"
-                       [errorStateMatcher]="phoneErrorMatcher"
-                       matInput>
-                <mat-error *ngIf="!phone.valid">
-                    Valid Phone Number: {{phoneHint}}
-                </mat-error>
-                <mat-hint>{{phoneHint}}</mat-hint>
-            </mat-form-field>
-        </div>
-    </form>
-    <p></p>
-    <mat-divider></mat-divider>
-    <h2>PhoneNumber JSON</h2>
-    <pre>{{regionalPhoneNumber | json}}</pre>
+    <mat-card-title>Angular Material Phone Handling</mat-card-title>
+    <mat-card-subtitle>Phone number formatting and validation with Angular Material Design and libphonenumber. As
+        documented in my <a href="https://mikedalrymple.com/angular-material-phone/">Angular Material Phone Entry</a>
+        post.
+    </mat-card-subtitle>
+    <mat-card-content>
+        <form class="profile" [formGroup]="profileForm">
+            <div formGroupName="phone">
+                <mat-form-field appearance="standard" class="phone_country">
+                    <mat-label>Country</mat-label>
+                    <mat-select formControlName="country" (selectionChange)="formatNumber()">
+                        <mat-option *ngFor="let countryCode of countyCodes" [value]="countryCode.code">
+                            {{countryCode.country}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field appearance="standard" class="phone_number">
+                    <mat-label>Phone Number</mat-label>
+                    <input formControlName="number"
+                           type="tel"
+                           placeholder="Telephone"
+                           (input)="formatNumber()"
+                           [errorStateMatcher]="phoneErrorMatcher"
+                           matInput>
+                    <mat-error *ngIf="!phoneGroup.valid">
+                        Valid Phone Number: {{phoneHint}}
+                    </mat-error>
+                    <mat-hint>{{phoneHint}}</mat-hint>
+                </mat-form-field>
+            </div>
+        </form>
+        <mat-divider></mat-divider>
+        <p class="json-output"><code>PhoneNumber('{{phoneNumberDigits}}', '{{phoneCountryControl.value}}
+            ').toJSON()</code></p>
+        <pre>{{phoneNumber | json}}</pre>
+    </mat-card-content>
 </mat-card>
