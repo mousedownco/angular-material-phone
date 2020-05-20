@@ -1,0 +1,32 @@
+<mat-card>
+    <mat-card-title>International Phone Entry</mat-card-title>
+    <form class="profile" [formGroup]="profileForm">
+        <div formGroupName="phone">
+            <mat-form-field appearance="standard" class="phone_region">
+                <mat-label>Phone Region</mat-label>
+                <mat-select formControlName="region" (selectionChange)="formatNumber()">
+                    <mat-option *ngFor="let countryCode of countyCodes" [value]="countryCode.code">
+                        {{countryCode.country}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="standard" class="phone_number">
+                <mat-label>Phone Number</mat-label>
+                <input formControlName="number"
+                       type="tel"
+                       placeholder="Telephone"
+                       (input)="formatNumber()"
+                       [errorStateMatcher]="phoneErrorMatcher"
+                       matInput>
+                <mat-error *ngIf="!phone.valid">
+                    Valid Phone Number: {{phoneHint}}
+                </mat-error>
+                <mat-hint>{{phoneHint}}</mat-hint>
+            </mat-form-field>
+        </div>
+    </form>
+    <p></p>
+    <mat-divider></mat-divider>
+    <h2>PhoneNumber JSON</h2>
+    <pre>{{regionalPhoneNumber | json}}</pre>
+</mat-card>
