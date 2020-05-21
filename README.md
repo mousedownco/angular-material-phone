@@ -2,7 +2,7 @@
 
 This repository contains a simply Angular 9 project that illustrates a way of handling phone number input using Angular Material design components and the [awesome-phonenumber](https://github.com/grantila/awesome-phonenumber) library which is a pre-compiled version of Google's [libphonenumber](https://github.com/google/libphonenumber).
 
-A detailed discussion of this project's contents can be found in my blog post [Angular Material Phone Entry](https://mikedalrymple.com/angular-material-phone).
+A detailed discussion of this project's contents can be found [in my blog post](https://mikedalrymple.com/angular-material-phone).
 
 # Running
 
