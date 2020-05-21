@@ -1,8 +1,6 @@
 <mat-card>
-    <mat-card-title>Angular Material Phone Handling</mat-card-title>
-    <mat-card-subtitle>Phone number formatting and validation with Angular Material Design and libphonenumber. As
-        documented in my <a href="https://mikedalrymple.com/angular-material-phone/">Angular Material Phone Entry</a>
-        post.
+    <mat-card-title>Phone Numbers with Angular Material Design</mat-card-title>
+    <mat-card-subtitle>Phone number formatting and validation with Angular Material Design
     </mat-card-subtitle>
     <mat-card-content>
         <form class="profile" [formGroup]="profileForm">
@@ -34,5 +32,6 @@
         <p class="json-output"><code>PhoneNumber('{{phoneNumberDigits}}', '{{phoneCountryControl.value}}
             ').toJSON()</code></p>
         <pre>{{phoneNumber | json}}</pre>
+        <mat-card-footer><a href="https://mikedalrymple.com/angular-material-phone/">Blog Post</a> | <a href="https://github.com/mousedownco/angular-material-phone">GitHub Repository</a></mat-card-footer>
     </mat-card-content>
 </mat-card>
