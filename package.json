@@ -21,7 +21,7 @@
     "@angular/platform-browser": "~12.2.14",
     "@angular/platform-browser-dynamic": "~12.2.14",
     "@angular/router": "~12.2.14",
-    "awesome-phonenumber": "^2.32.0",
+    "awesome-phonenumber": "^2.64.0",
     "rxjs": "~6.5.4",
     "tslib": "^2.0.0",
     "zone.js": "~0.11.4"
