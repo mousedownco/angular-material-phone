@@ -7,7 +7,11 @@ import {ErrorStateMatcher} from '@angular/material/core';
 @Component({
     selector: 'app-phone',
     templateUrl: './phone.component.html',
-    styleUrls: ['./phone.component.scss']
+    styles: [`
+      .phone_number {
+        padding-left: 1em;
+      }
+    `]
 })
 export class PhoneComponent {
 
