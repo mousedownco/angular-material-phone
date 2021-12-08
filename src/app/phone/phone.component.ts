@@ -4,6 +4,12 @@ import PhoneNumber from 'awesome-phonenumber';
 import {ISO_3166_1_CODES} from './country-codes';
 import {ErrorStateMatcher} from '@angular/material/core';
 
+/**
+ * The PhoneComponent presents a country selector and phone number
+ * field that formats the phone number according to the selected
+ * country's number standard.  The available awesome-phonenumber
+ * metadata are presented as the phone number is entered.
+ */
 @Component({
     selector: 'app-phone',
     templateUrl: './phone.component.html',
@@ -29,6 +35,50 @@ export class PhoneComponent {
     ) {
     }
 
+
+    /**
+     * Return a string containing only numeric values from the
+     * phone.number form field.
+     */
+    get phoneNumberDigits(): string {
+        return this.phoneNumberControl.value.replace(/\D/g, '');
+    }
+
+    /**
+     * Return an {@see PhoneNumber} value created from the
+     * phoneNumberDigits and currently selected country code.
+     */
+    get phoneNumber(): PhoneNumber {
+        return new PhoneNumber(this.phoneNumberDigits, this.phoneCountryControl.value);
+    }
+
+    /**
+     * Formats the phone number digits using the 'national' format
+     * from awesome-phonenumber.
+     */
+    formatNumber() {
+        const natNum = this.phoneNumber.getNumber('national');
+        this.phoneNumberControl.setValue((natNum) ? natNum : this.phoneNumberDigits);
+    }
+
+    /**
+     * Generate a hint using the {@see PhoneNumber} getExample method
+     * with the currently selected country.
+     */
+    get phoneHint(): string {
+        return PhoneNumber.getExample(this.phoneCountryControl.value).getNumber('national');
+    }
+
+    /**
+     * Get the [E.164]{@link https://en.wikipedia.org/wiki/E.164} formatted
+     * phone number typically required by systems for making calls and
+     * sending text messages.
+     */
+    get phoneE164(): string {
+        return this.phoneNumber.getNumber('e164');
+    }
+
+    // FormControl Getters
     get phoneGroup() {
         return this.profileForm.get('phone') as FormControl;
     }
@@ -40,32 +90,16 @@ export class PhoneComponent {
     get phoneNumberControl() {
         return this.profileForm.get('phone.number') as FormControl;
     }
-
-    get phoneNumberDigits(): string {
-        return this.phoneNumberControl.value.replace(/\D/g, '');
-    }
-
-    get phoneNumber(): PhoneNumber {
-        return new PhoneNumber(this.phoneNumberDigits, this.phoneCountryControl.value);
-    }
-
-    get phoneHint(): string {
-        return PhoneNumber.getExample(this.phoneCountryControl.value).getNumber('national');
-    }
-
-    get phoneE164(): string {
-        return this.phoneNumber.getNumber('e164');
-    }
-
-    formatNumber() {
-        const natNum = this.phoneNumber.getNumber('national');
-        this.phoneNumberControl.setValue((natNum) ? natNum : this.phoneNumberDigits);
-    }
 }
 
+/**
+ * Validates a FormGroup containing `country` and `number` fields that
+ * are used to generate a {@see PhoneNumber}. Valid numbers are
+ * determined by the PhoneNumber.isValid() method.
+ */
 export const phoneValidator: ValidatorFn = (control: FormGroup): ValidationErrors | null => {
-    const num = control.get('number');
     const country = control.get('country');
+    const num = control.get('number');
     if (num?.value && country?.value && !(new PhoneNumber(num.value, country.value).isValid())) {
         return {invalidPhone: true};
     } else {
@@ -73,6 +107,10 @@ export const phoneValidator: ValidatorFn = (control: FormGroup): ValidationError
     }
 };
 
+/**
+ * {@see ErrorStateMatcher} used to update the error state of the
+ * phone number when the country or phone number changes.
+ */
 export class PhoneErrorMatcher implements ErrorStateMatcher {
     isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
         return !!(control.value && control.touched && !control?.parent?.valid);
